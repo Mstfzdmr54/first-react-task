@@ -1,17 +1,21 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import axios from "axios"; 
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+async function getData(id) {
+  try {
+    const response = await axios.get(
+      `https://jsonplaceholder.typicode.com/users/${id}`
+    ); 
+    const userData = response.data;
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+    const responsePosts = await axios.get(
+      `https://jsonplaceholder.typicode.com/posts?id=${id}`
+    );
+    const postData = responsePosts.data;
+
+    let newData = Object.assign(userData, { posts: postData }); // iki farklı veri aynı obje içerisine yerleştirildi
+    console.log(newData);
+  } catch (error) {
+    console.error(error);
+  }
+}
+getData(1);
